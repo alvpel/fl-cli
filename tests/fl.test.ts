@@ -4,7 +4,7 @@ import { writeLinksConfig, readLinksConfig, initConfig } from "../src/config/con
 import { join } from "jsr:@std/path";
 
 // Use a temporary file for testing
-const tempConfigPath = join(Deno.cwd(), 'config', 'links.test.json');
+const tempConfigPath = join(Deno.cwd(), 'tests', 'links.test.json');
 
 // Mock data for testing
 const mockLinks = {
