@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-case-declarations
-import { commands } from "./commands.ts";
+import { commands } from "./commandRegistry.ts";
 import { listLinks, addLink, editLink, deleteLink, resolveLink } from '../services/linkService.ts';
 import { help } from "./help.ts";
 
@@ -16,13 +16,6 @@ export async function handleFlCommand(command: string, args: string[]) {
         } else {
             console.log(`No fast link found for "${command}"`)
         }
-        return;
-    }
-
-    // Validate arguments based on command defintion
-    const requiredArgs = commandDef.args.filter(arg => arg.required).length;
-    if (args.length < requiredArgs || args.length > commandDef.args.length) {
-        console.error(`Usage: ${commandDef.usage}`);
         return;
     }
 

@@ -1,7 +1,7 @@
-import { readLinksConfig, writeLinksConfig, LinkConfig } from '../utils/config.ts';
+import { readLinksConfig, writeLinksConfig, LinkConfig } from "../config/configService.ts";
 
-export function resolveLink(linkName: string, configPath?: string): string | null {
-    const links = readLinksConfig(configPath);
+export function resolveLink(linkName: string): string | null {
+    const links = readLinksConfig();
     const [shortcut, variable] = linkName.split("/", 2);
 
     if (links[shortcut]) {
@@ -16,8 +16,8 @@ export function resolveLink(linkName: string, configPath?: string): string | nul
     return null;
 }
 
-export function listLinks(configPath?: string) {
-    const links = readLinksConfig(configPath);
+export function listLinks() {
+    const links = readLinksConfig();
     console.log('Available links:');
     for (const [name, config] of Object.entries(links)) {
         if (typeof config === 'object' && config !== null) {
@@ -29,8 +29,8 @@ export function listLinks(configPath?: string) {
     }
 }
 
-export async function addLink(name: string, url: string, variablePattern?: string, configPath?: string) {
-    const links = readLinksConfig(configPath);
+export async function addLink(name: string, url: string, variablePattern?: string) {
+    const links = readLinksConfig();
     if (links[name]) {
         console.error(`FL "${name}" already exists. use --edit to modify it.`);
         return;
@@ -42,12 +42,12 @@ export async function addLink(name: string, url: string, variablePattern?: strin
     };
 
     links[name] = newLink;
-    await writeLinksConfig(links, configPath);
+    await writeLinksConfig(links);
     console.log(`FL "${name}" added.`)
 }
 
 export async function editLink(oldName: string, newName: string, newUrl: string, newVariablePattern?: string, configPath?: string) {
-    const links = readLinksConfig(configPath);
+    const links = readLinksConfig();
     if (!links[oldName]) {
         console.error(`FL "${oldName}" does not exist.`);
         return;
@@ -60,17 +60,17 @@ export async function editLink(oldName: string, newName: string, newUrl: string,
 
     delete links[oldName];
     links[newName] = newLink;
-    await writeLinksConfig(links, configPath);
+    await writeLinksConfig(links);
     console.log(`FL "${oldName}" has been updated to "${newName}" with URL "${newUrl}"`);
 }
 
 export async function deleteLink(name: string, configPath?: string) {
-    const links = readLinksConfig(configPath);
+    const links = readLinksConfig();
     if (!links[name]) {
         console.error(`FL "${name}" does not exist`);
         return;
     }
     delete links[name];
-    await writeLinksConfig(links, configPath);
+    await writeLinksConfig(links);
     console.log(`FL "${name}" has been deleted`);
 }
