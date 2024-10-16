@@ -1,5 +1,5 @@
 import { assertEquals, assertExists } from "jsr:@std/assert";
-import { addLink, editLink, deleteLink, resolveLink, listLinks } from "../src/services/linkService.ts";
+import { addLink, editLink, deleteLink, resolveLink } from "../src/services/linkService.ts";
 import { writeLinksConfig, readLinksConfig } from "../src/utils/config.ts";
 import { join } from "jsr:@std/path";
 
