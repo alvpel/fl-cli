@@ -1,7 +1,10 @@
 import { readLinksConfig, writeLinksConfig, LinkConfig } from "../config/configService.ts";
+import { joinPaths } from '../utils/pathUtils.ts';
 
-export function resolveLink(linkName: string): string | null {
-    const links = readLinksConfig();
+const defaultConfigPath = joinPaths('.fl', 'links.json');
+
+export function resolveLink(linkName: string, configPath: string = defaultConfigPath): string | null {
+    const links = readLinksConfig(configPath);
     const [shortcut, variable] = linkName.split("/", 2);
 
     if (links[shortcut]) {
@@ -16,8 +19,8 @@ export function resolveLink(linkName: string): string | null {
     return null;
 }
 
-export function listLinks() {
-    const links = readLinksConfig();
+export function listLinks(configPath: string = defaultConfigPath) {
+    const links = readLinksConfig(configPath);
     console.log('Available links:');
     for (const [name, config] of Object.entries(links)) {
         if (typeof config === 'object' && config !== null) {
@@ -29,8 +32,8 @@ export function listLinks() {
     }
 }
 
-export async function addLink(name: string, url: string, variablePattern?: string) {
-    const links = readLinksConfig();
+export async function addLink(name: string, url: string, variablePattern?: string, configPath: string = defaultConfigPath) {
+    const links = readLinksConfig(configPath);
     if (links[name]) {
         console.error(`FL "${name}" already exists. use --edit to modify it.`);
         return;
@@ -42,12 +45,12 @@ export async function addLink(name: string, url: string, variablePattern?: strin
     };
 
     links[name] = newLink;
-    await writeLinksConfig(links);
+    await writeLinksConfig(links, configPath);
     console.log(`FL "${name}" added.`)
 }
 
-export async function editLink(oldName: string, newName: string, newUrl: string, newVariablePattern?: string, configPath?: string) {
-    const links = readLinksConfig();
+export async function editLink(oldName: string, newName: string, newUrl: string, newVariablePattern?: string, configPath: string = defaultConfigPath) {
+    const links = readLinksConfig(configPath);
     if (!links[oldName]) {
         console.error(`FL "${oldName}" does not exist.`);
         return;
@@ -60,17 +63,17 @@ export async function editLink(oldName: string, newName: string, newUrl: string,
 
     delete links[oldName];
     links[newName] = newLink;
-    await writeLinksConfig(links);
+    await writeLinksConfig(links, configPath);
     console.log(`FL "${oldName}" has been updated to "${newName}" with URL "${newUrl}"`);
 }
 
-export async function deleteLink(name: string, configPath?: string) {
-    const links = readLinksConfig();
+export async function deleteLink(name: string, configPath: string = defaultConfigPath) {
+    const links = readLinksConfig(configPath);
     if (!links[name]) {
         console.error(`FL "${name}" does not exist`);
         return;
     }
     delete links[name];
-    await writeLinksConfig(links);
+    await writeLinksConfig(links, configPath);
     console.log(`FL "${name}" has been deleted`);
 }
