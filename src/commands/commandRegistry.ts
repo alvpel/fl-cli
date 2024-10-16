@@ -23,6 +23,13 @@ export const commands: Command[] = [
         usage: 'fl [--list, -l]',
     },
     {
+        name: '--shortlist',
+        shorthand: '-sl',
+        description: 'Short list of fast links.',
+        args: [],
+        usage: 'fl [--shortlist, -sl]',
+    },
+    {
         name: '--add',
         shorthand: '-a',
         description: 'Add a new fast link with name and URL, and optional variable pattern. Use {*} in the pattern to denote where the variable will be.',

@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-case-declarations
 import { commands } from "./commandRegistry.ts";
-import { listLinks, addLink, editLink, deleteLink, resolveLink } from '../services/linkService.ts';
+import { listLinks, addLink, editLink, deleteLink, resolveLink, shortlistLinks } from '../services/linkService.ts';
 import { help } from "./help.ts";
 
 function getFullCommand(command: string): string | undefined {
@@ -31,7 +31,10 @@ export async function handleFlCommand(command: string, args: string[]) {
     }
     switch (fullCommand) {
         case '--list':
-            listLinks()
+            listLinks();
+            break;
+        case '--shortlist':
+            shortlistLinks();
             break;
         case '--add':
             const [name, url, variablePattern] = args;

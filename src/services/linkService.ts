@@ -32,6 +32,14 @@ export function listLinks(configPath: string = defaultConfigPath) {
     }
 }
 
+export function shortlistLinks(configPath: string = defaultConfigPath) {
+    const links = readLinksConfig(configPath);
+    console.log('Link names:');
+    for (const name of Object.keys(links)) {
+        console.log(`- ${name}`);
+    }
+}
+
 export async function addLink(name: string, url: string, variablePattern?: string, configPath: string = defaultConfigPath) {
     const links = readLinksConfig(configPath);
     if (links[name]) {
