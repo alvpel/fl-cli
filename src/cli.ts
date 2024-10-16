@@ -1,15 +1,13 @@
-import { fl } from './commands/fl.ts';
-import { help } from './commands/help.ts';
+import { handleFlCommand } from './commands/fl.ts';
 
-const command = Deno.args[0];
-const args = Deno.args.slice(1);
+const [command, ...args] = Deno.args;
 
-switch (command) {
-    case 'fl':
-        fl(args);
-        break;
-    case 'help':
-    default:
-        help();
-        break;
+if (command !== 'fl') {
+    console.error('Invalid command. Usage: fl <command> [options]');
+    Deno.exit(1);
 }
+
+const subCommand = args[0];
+const subArgs = args.slice(1);
+
+handleFlCommand(subCommand, subArgs);
