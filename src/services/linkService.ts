@@ -1,7 +1,7 @@
 import { readLinksConfig, writeLinksConfig } from '../utils/config.ts';
 
-export function resolveLink(linkName: string): string | null {
-    const links = readLinksConfig();
+export function resolveLink(linkName: string, configPath?: string): string | null {
+    const links = readLinksConfig(configPath);
     return links[linkName] || null;
 }
 

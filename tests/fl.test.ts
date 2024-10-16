@@ -65,13 +65,13 @@ Deno.test("List Links: Lists all available links", async () => {
 // Test: Resolve Link
 Deno.test("Resolve Link: Resolves an existing link", async () => {
   await resetMockConfig();
-  const resolvedLink = resolveLink("dashboard");
+  const resolvedLink = resolveLink("dashboard", tempConfigPath);
   assertEquals(resolvedLink, "https://dashboard.com");
 });
 
 // Test: Resolve Non-Existent Link
 Deno.test("Resolve Link: Returns null for a non-existent link", async () => {
   await resetMockConfig();
-  const resolvedLink = resolveLink("nonexistent");
+  const resolvedLink = resolveLink("nonexistent", tempConfigPath);
   assertEquals(resolvedLink, null);
 });
