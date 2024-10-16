@@ -42,6 +42,14 @@ export const commands: Command[] = [
         usage: 'fl --edit <old-name> <new-name> \'<new-url>\' \'<new-variablePattern>\'',
     },
     {
+        name: '--delete',
+        description: 'Delete a fast link',
+        args: [
+            { name: 'name', required: true }
+        ],
+        usage: 'fl --delete <name>',
+    },
+    {
         name: '--help',
         description: 'Show appliaction help and usage.',
         args: [],

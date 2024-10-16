@@ -6,10 +6,6 @@
     "baseUrl": "https://one.eu.newrelic.com/logger"
   },
   "g": {
-    "baseUrl": "http://google.com",
-    "variablePattern": "http://google.com"
-  },
-  "t": {
     "baseUrl": "http://www.google.com",
     "variablePattern": "http://www.google.com/search?q={*}"
   }
