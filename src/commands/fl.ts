@@ -1,4 +1,4 @@
-import { commands, Command } from "./commands.ts";
+import { commands } from "./commands.ts";
 import { listLinks, addLink, editLink, deleteLink, resolveLink } from '../services/linkService.ts';
 import { help } from "./help.ts";
 
