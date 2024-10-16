@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-case-declarations
 import { commands } from "./commandRegistry.ts";
 import { listLinks, addLink, editLink, deleteLink, resolveLink, shortlistLinks } from '../services/linkService.ts';
-import { help } from "./help.ts";
+import { help } from "../services/helpService.ts";
 
 function getFullCommand(command: string): string | undefined {
     const foundCommand = commands.find(comd => comd.name === command || comd.shorthand === command);

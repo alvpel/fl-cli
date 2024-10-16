@@ -1,4 +1,4 @@
-import { commands } from "./commandRegistry.ts";
+import { commands } from "../commands/commandRegistry.ts";
 
 export function help() {
     console.log('Usage: fl <fastlink>[/query]')
