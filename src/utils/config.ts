@@ -49,6 +49,6 @@ export async function writeLinksConfig(links: LinksConfig, configPath: string = 
     try {
         await Deno.writeTextFile(configPath, JSON.stringify(links, null, 2));
     } catch (error) {
-        console.error('Failed to write configuariton file:', error);
+        console.error('Failed to write configuration file:', error);
     }
 }

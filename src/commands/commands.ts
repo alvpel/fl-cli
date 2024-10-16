@@ -51,7 +51,7 @@ export const commands: Command[] = [
     },
     {
         name: '--help',
-        description: 'Show appliaction help and usage.',
+        description: 'Show application help and usage.',
         args: [],
         usage: 'fl --help',
     },

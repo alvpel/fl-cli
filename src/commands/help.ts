@@ -1,7 +1,8 @@
 import { commands } from "./commands.ts";
 
 export function help() {
-    console.log("Available commands:");
+    console.log('Usage: fl <fastlink>[/query]')
+    console.log('Available commands:');
     commands.forEach((cmd) => {
         console.log(`\n${cmd.usage}`);
         console.log(`    ${cmd.description}`);
