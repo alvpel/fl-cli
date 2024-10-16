@@ -25,7 +25,7 @@ export const commands: Command[] = [
     {
         name: '--add',
         shorthand: '-a',
-        description: 'Add a new fast link with name and URL, and optional variable pattern. Use [var] in the pattern to denote where the variable will be.',
+        description: 'Add a new fast link with name and URL, and optional variable pattern. Use {*} in the pattern to denote where the variable will be.',
         args: [
             { name: 'name', required: true },
             { name: 'url', required: true },
