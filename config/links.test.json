@@ -1,4 +1,9 @@
 {
-  "dashboard": "https://dashboard.com",
-  "docs": "https://docs.com"
+  "dashboard": {
+    "baseUrl": "https://dashboard.com"
+  },
+  "g": {
+    "baseUrl": "http://www.google.com",
+    "variablePattern": "https://www.google.com/search?q={*}"
+  }
 }

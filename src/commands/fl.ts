@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-case-declarations
 import { commands } from "./commands.ts";
 import { listLinks, addLink, editLink, deleteLink, resolveLink } from '../services/linkService.ts';
 import { help } from "./help.ts";
@@ -19,7 +20,8 @@ export async function handleFlCommand(command: string, args: string[]) {
     }
 
     // Validate arguments based on command defintion
-    if (args.length !== commandDef.args.length) {
+    const requiredArgs = commandDef.args.filter(arg => arg.required).length;
+    if (args.length < requiredArgs || args.length > commandDef.args.length) {
         console.error(`Usage: ${commandDef.usage}`);
         return;
     }
@@ -29,10 +31,12 @@ export async function handleFlCommand(command: string, args: string[]) {
             listLinks()
             break;
         case '--add':
-            await addLink(args[0], args[1]);
+            const [name, url, variablePattern] = args;
+            await addLink(name, url, variablePattern);
             break;
         case '--edit':
-            await editLink(args[0], args[1], args[2]);
+            const [oldName, newName, newUrl, newVariablePattern] = args;
+            await editLink(oldName, newName, newUrl, newVariablePattern);
             break;
         case '--delete':
             await deleteLink(args[0]);

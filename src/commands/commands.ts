@@ -8,11 +8,11 @@ export interface Command {
 export const commands: Command[] = [
     {
         name: '<name>',
-        description: 'Open the link associated with the shortcut (e.g., fl dashboard).',
+        description: 'Open the link associated with the shortcut (e.g., fl yt). Supports variables (e.g. fl yt/veritasium',
         args: [
             { name: 'name', required: true },
         ],
-        usage: 'fl <name>'
+        usage: 'fl <name>[/<variable>]'
     },
     {
         name: '--list',
@@ -22,12 +22,13 @@ export const commands: Command[] = [
     },
     {
         name: '--add',
-        description: 'Add a new fast link with name and URL',
+        description: 'Add a new fast link with name and URL, and optional variable pattern. Use [var] in the pattern to denote where the variable will be.',
         args: [
             { name: 'name', required: true },
             { name: 'url', required: true },
+            { name: 'variablePattern', required: false }
         ],
-        usage: 'fl --add <name> <url>',
+        usage: 'fl --add <name> <url> [variablePattern]',
     },
     {
         name: '--edit',
@@ -36,6 +37,7 @@ export const commands: Command[] = [
             { name: 'old-name', required: true },
             { name: 'new-name', required: true },
             { name: 'new-url', required: true },
+            { name: 'new-variablePattern', required: false }
         ],
         usage: 'fl --edit <old-name> <new-name> <new-url>',
     },

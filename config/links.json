@@ -1,4 +1,16 @@
 {
-  "yt": "https://www.youtube.com",
-  "g": "https://www.google.com"
+  "yt": {
+    "baseUrl": "https://www.youtube.com"
+  },
+  "logs": {
+    "baseUrl": "https://one.eu.newrelic.com/logger"
+  },
+  "g": {
+    "baseUrl": "http://google.com",
+    "variablePattern": "http://google.com"
+  },
+  "t": {
+    "baseUrl": "http://www.google.com",
+    "variablePattern": "http://www.google.com/search?q=[var]"
+  }
 }
