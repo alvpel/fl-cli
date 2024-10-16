@@ -28,7 +28,7 @@ export const commands: Command[] = [
             { name: 'url', required: true },
             { name: 'variablePattern', required: false }
         ],
-        usage: 'fl --add <name> <url> [variablePattern]',
+        usage: 'fl --add <name> \'<url>\' \'[variablePattern]\'',
     },
     {
         name: '--edit',
@@ -39,7 +39,7 @@ export const commands: Command[] = [
             { name: 'new-url', required: true },
             { name: 'new-variablePattern', required: false }
         ],
-        usage: 'fl --edit <old-name> <new-name> <new-url>',
+        usage: 'fl --edit <old-name> <new-name> \'<new-url>\' \'<new-variablePattern>\'',
     },
     {
         name: '--help',

@@ -11,6 +11,6 @@
   },
   "t": {
     "baseUrl": "http://www.google.com",
-    "variablePattern": "http://www.google.com/search?q=[var]"
+    "variablePattern": "http://www.google.com/search?q={*}"
   }
 }

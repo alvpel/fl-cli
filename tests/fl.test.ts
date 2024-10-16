@@ -9,7 +9,7 @@ const tempConfigPath = join(Deno.cwd(), 'config', 'links.test.json');
 // Mock data for testing
 const mockLinks = {
   dashboard: { baseUrl: "https://dashboard.com" },
-  g: { baseUrl: "http://www.google.com", variablePattern: "https://www.google.com/search?q=[var]" }
+  g: { baseUrl: "http://www.google.com", variablePattern: "https://www.google.com/search?q={*}" }
 };
 
 // Helper to reset the mock configuration before each test
@@ -30,21 +30,21 @@ Deno.test({
 // Test: Add Link with Variable Pattern
 Deno.test("Add Link: Adds a new link with a variable pattern successfully", async () => {
   await resetMockConfig();
-  await addLink("bing", "https://www.bing.com", "https://www.bing.com/search?q=[var]", tempConfigPath);
+  await addLink("bing", "https://www.bing.com", "https://www.bing.com/search?q={*}", tempConfigPath);
   const links = readLinksConfig(tempConfigPath);
   assertExists(links["bing"]);
   assertEquals(links["bing"].baseUrl, "https://www.bing.com");
-  assertEquals(links["bing"].variablePattern, "https://www.bing.com/search?q=[var]");
+  assertEquals(links["bing"].variablePattern, "https://www.bing.com/search?q={*}");
 });
 
 // Test: Edit Link with Variable Pattern
 Deno.test("Edit Link: Edits an existing link to include a variable pattern", async () => {
   await resetMockConfig();
-  await editLink("dashboard", "dashboard", "https://dashboard-updated.com", "https://dashboard-updated.com/page?q=[var]", tempConfigPath);
+  await editLink("dashboard", "dashboard", "https://dashboard-updated.com", "https://dashboard-updated.com/page?q={*}", tempConfigPath);
   const links = readLinksConfig(tempConfigPath);
   assertExists(links["dashboard"]);
   assertEquals(links["dashboard"].baseUrl, "https://dashboard-updated.com");
-  assertEquals(links["dashboard"].variablePattern, "https://dashboard-updated.com/page?q=[var]");
+  assertEquals(links["dashboard"].variablePattern, "https://dashboard-updated.com/page?q={*}");
 });
 
 // Test: Resolve Link with Variable
@@ -83,5 +83,5 @@ Deno.test("List Links: Lists all links including those with variable patterns", 
   assertEquals(Object.keys(links).length, 2);
   assertEquals(links["dashboard"].baseUrl, "https://dashboard.com");
   assertEquals(links["g"].baseUrl, "http://www.google.com");
-  assertEquals(links["g"].variablePattern, "https://www.google.com/search?q=[var]");
+  assertEquals(links["g"].variablePattern, "https://www.google.com/search?q={*}");
 });

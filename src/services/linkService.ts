@@ -8,7 +8,7 @@ export function resolveLink(linkName: string, configPath?: string): string | nul
         const linkConfig = links[shortcut];
 
         if (variable && linkConfig.variablePattern) {
-            return linkConfig.variablePattern.replace('[var]', encodeURIComponent(variable));
+            return linkConfig.variablePattern.replace('{*}', encodeURIComponent(variable));
         }
 
         return linkConfig.baseUrl;
