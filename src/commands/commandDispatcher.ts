@@ -3,10 +3,15 @@ import { commands } from "./commandRegistry.ts";
 import { listLinks, addLink, editLink, deleteLink, resolveLink } from '../services/linkService.ts';
 import { help } from "./help.ts";
 
-export async function handleFlCommand(command: string, args: string[]) {
-    const commandDef = commands.find(comd => comd.name === command);
+function getFullCommand(command: string): string | undefined {
+    const foundCommand = commands.find(comd => comd.name === command || comd.shorthand === command);
+    return foundCommand?.name;
+}
 
-    if (!commandDef) {
+export async function handleFlCommand(command: string, args: string[]) {
+    const fullCommand = getFullCommand(command);
+
+    if (!fullCommand) {
         // Assume it's a fast link if not a command
         const resolvedUrl = resolveLink(command);
         if (resolvedUrl) {
@@ -19,7 +24,12 @@ export async function handleFlCommand(command: string, args: string[]) {
         return;
     }
 
-    switch (commandDef.name) {
+    const commandDef = commands.find(comd => comd.name === fullCommand);
+    if (!commandDef) {
+        help();
+        return;
+    }
+    switch (fullCommand) {
         case '--list':
             listLinks()
             break;

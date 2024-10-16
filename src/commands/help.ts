@@ -4,7 +4,8 @@ export function help() {
     console.log('Usage: fl <fastlink>[/query]')
     console.log('Available commands:');
     commands.forEach((cmd) => {
-        console.log(`\n${cmd.usage}`);
+        const flag = cmd.shorthand ? `${cmd.name} (${cmd.shorthand})` : cmd.name;
+        console.log(`\n${flag}`);
         console.log(`    ${cmd.description}`);
         if (cmd.args.length > 0) {
             console.log(`    Arguments:`);
