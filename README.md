@@ -37,7 +37,7 @@ Fast Links CLI is a command-line tool built using Deno that allows you to manage
 
 Use Deno's `compile` command to create an executable:
 ```bash
-deno compile --allow-read --allow-write --allow-run --output fl src/cli.ts
+deno compile --allow-read --allow-write --allow-run --allow-env --output fl src/cli.ts
 ```
 
 Move the binary to a directory in your system's PATH, such as `/usr/local/bin`:
