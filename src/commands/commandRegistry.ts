@@ -41,8 +41,8 @@ export const commands: Command[] = [
         usage: 'fl [--add, -a] <name> \'<url>\' \'[variablePattern]\'',
     },
     {
-        name: '--edit',
-        shorthand: '-e',
+        name: '--replace',
+        shorthand: '-r',
         description: 'Edit an existing fast link with a new name and URL.',
         args: [
             { name: 'old-name', required: true },

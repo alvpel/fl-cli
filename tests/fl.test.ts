@@ -1,5 +1,5 @@
 import { assertEquals, assertExists } from "jsr:@std/assert";
-import { addLink, editLink, deleteLink, resolveLink } from "../src/services/linkService.ts";
+import { addLink, replaceLink, deleteLink, resolveLink } from "../src/services/linkService.ts";
 import { writeLinksConfig, readLinksConfig, initConfig } from "../src/config/configService.ts";
 import { join } from "jsr:@std/path";
 
@@ -39,10 +39,10 @@ Deno.test("Add Link: Adds a new link with a variable pattern successfully", asyn
   assertEquals(links["bing"].variablePattern, "https://www.bing.com/search?q={*}");
 });
 
-// Test: Edit Link with Variable Pattern
-Deno.test("Edit Link: Edits an existing link to include a variable pattern", async () => {
+// Test: Replace Link with Variable Pattern
+Deno.test("Replace Link: Replaces an existing link to include a variable pattern", async () => {
   await resetMockConfig();
-  await editLink("dashboard", "dashboard", "https://dashboard-updated.com", "https://dashboard-updated.com/page?q={*}", tempConfigPath);
+  await replaceLink("dashboard", "dashboard", "https://dashboard-updated.com", "https://dashboard-updated.com/page?q={*}", tempConfigPath);
   const links = readLinksConfig(tempConfigPath);
   assertExists(links["dashboard"]);
   assertEquals(links["dashboard"].baseUrl, "https://dashboard-updated.com");

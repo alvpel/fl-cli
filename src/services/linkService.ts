@@ -43,7 +43,7 @@ export function shortlistLinks(configPath: string = defaultConfigPath) {
 export async function addLink(name: string, url: string, variablePattern?: string, configPath: string = defaultConfigPath) {
     const links = readLinksConfig(configPath);
     if (links[name]) {
-        console.error(`FL "${name}" already exists. use --edit to modify it.`);
+        console.error(`FL "${name}" already exists. use --replace to replace it.`);
         return;
     }
 
@@ -57,7 +57,7 @@ export async function addLink(name: string, url: string, variablePattern?: strin
     console.log(`FL "${name}" added.`)
 }
 
-export async function editLink(oldName: string, newName: string, newUrl: string, newVariablePattern?: string, configPath: string = defaultConfigPath) {
+export async function replaceLink(oldName: string, newName: string, newUrl: string, newVariablePattern?: string, configPath: string = defaultConfigPath) {
     const links = readLinksConfig(configPath);
     if (!links[oldName]) {
         console.error(`FL "${oldName}" does not exist.`);

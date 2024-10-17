@@ -13,7 +13,7 @@ Fast Links CLI is a command-line tool built using Deno that allows you to manage
 - [License](#license)
 
 ## Features
-- **Add, Edit, and Delete Fast Links**: Manage URL shortcuts for fast access.
+- **Add, Replace, and Delete Fast Links**: Manage URL shortcuts for fast access.
 - **Support for Variable Parameters**: Create links with placeholders to dynamically insert values using `{*}`.
 - **Shorthand Commands**: Use shorthand flags for quicker CLI usage (e.g., `-a` for `--add`).
 - **Shortlist Command**: Quickly display a list of all fast link names.
@@ -58,7 +58,7 @@ The CLI supports various commands to manage fast links.
 | `fl --list`           | `-l`      | List all available fast links.                      |
 | `fl --shortlist`      | `-sl`     | Show only the names of the fast links.              |
 | `fl --add <name> <url> [<variableUrl>]` | `-a`    | Add a new fast link with an optional variable pattern. |
-| `fl --edit <old-name> <new-name> <new-url> [<variableUrl>]` | `-e` | Edit an existing fast link. |
+| `fl --replace <old-name> <new-name> <new-url> [<variableUrl>]` | `-r` | Edit an existing fast link. |
 | `fl --delete <name>`  | `-d`      | Delete a fast link by name.                         |
 | `fl --help`           | `-h`      | Show help and usage information.                    |
 | `fl <name>[/query]`   |           | Open the fast link associated with the given name.  |
@@ -98,14 +98,14 @@ Or use the shorthand:
 fl -sl
 ```
 
-#### Edit an Existing Link
+#### Replace an Existing Link
 ```bash
-fl --edit google google-search http://www.google.com/search?q={*}
+fl --replace google google-search http://www.google.com/search?q={*}
 ```
 
-#### Edit an Existing Link with a Variable Pattern
+#### Replace an Existing Link with a Variable Pattern
 ```bash
-fl --edit google google-search http://www.google.com/ "http://www.google.com/search?q={*}"
+fl --replace google google-search http://www.google.com/ "http://www.google.com/search?q={*}"
 ```
 
 #### Delete a Link
@@ -142,9 +142,9 @@ Variable patterns allow you to create dynamic URLs by including placeholders. Th
      http://www.google.com/search?q=deno
      ```
 
-2. **Editing a Link to Use a Variable**:
+2. **Replacing a Link to Use a Variable**:
    ```bash
-   fl --edit search search http://www.bing.com "http://www.bing.com/search?q={*}"
+   fl --replace search search http://www.bing.com "http://www.bing.com/search?q={*}"
    ```
    - Now, `fl search/openai` would redirect to:
      ```
