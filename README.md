@@ -76,7 +76,7 @@ fl -a google http://www.google.com
 
 #### Add a Link with a Variable Pattern
 ```bash
-fl --add search "http://www.google.com/search?q={*}"
+fl --add google http://www.google.com "http://www.google.com/search?q={*}"
 ```
 This will allow you to use `fl search/deno` to search Google for "deno."
 
@@ -89,7 +89,7 @@ Or use the shorthand:
 fl -l
 ```
 
-#### Show Only Link Names (Shortlist)
+#### Show Only Fast Link Names (Shortlist)
 ```bash
 fl --shortlist
 ```
@@ -101,6 +101,11 @@ fl -sl
 #### Edit an Existing Link
 ```bash
 fl --edit google google-search http://www.google.com/search?q={*}
+```
+
+#### Edit an Existing Link with a Variable Pattern
+```bash
+fl --edit google google-search http://www.google.com/ "http://www.google.com/search?q={*}"
 ```
 
 #### Delete a Link
@@ -119,7 +124,7 @@ fl google
 
 #### Open a Fast Link with a Variable
 ```bash
-fl search/deno
+fl google/deno
 ```
 
 ## Variable Patterns
@@ -130,7 +135,7 @@ Variable patterns allow you to create dynamic URLs by including placeholders. Th
 
 1. **Add a Link with a Variable Pattern**:
    ```bash
-   fl --add search "http://www.google.com/search?q={*}"
+   fl --add search http://www.google.com "http://www.google.com/search?q={*}"
    ```
    - When you call `fl search/deno`, `{*}` is replaced by "deno", resulting in:
      ```
@@ -139,7 +144,7 @@ Variable patterns allow you to create dynamic URLs by including placeholders. Th
 
 2. **Editing a Link to Use a Variable**:
    ```bash
-   fl --edit search search "http://www.bing.com/search?q={*}"
+   fl --edit search search http://www.bing.com "http://www.bing.com/search?q={*}"
    ```
    - Now, `fl search/openai` would redirect to:
      ```
