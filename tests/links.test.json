@@ -3,7 +3,7 @@
     "baseUrl": "https://dashboard.com"
   },
   "g": {
-    "baseUrl": "http://www.google.com",
+    "baseUrl": "https://www.google.com",
     "variablePattern": "https://www.google.com/search?q={*}"
   }
 }

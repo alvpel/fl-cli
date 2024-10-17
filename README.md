@@ -58,7 +58,8 @@ The CLI supports various commands to manage fast links.
 | `fl --list`           | `-l`      | List all available fast links.                      |
 | `fl --shortlist`      | `-sl`     | Show only the names of the fast links.              |
 | `fl --add <name> <url> [<variableUrl>]` | `-a`    | Add a new fast link with an optional variable pattern. |
-| `fl --replace <old-name> <new-name> <new-url> [<variableUrl>]` | `-r` | Edit an existing fast link. |
+| `fl --replace <old-name> <new-name> <new-url> [<variableUrl>]` | `-r` | Replace an existing fast link. |
+| `fl --edit <name> <field> <value>` | `-e` | Edit a value of an existing fast link. Fields: --name, --link, --vlink. |
 | `fl --delete <name>`  | `-d`      | Delete a fast link by name.                         |
 | `fl --help`           | `-h`      | Show help and usage information.                    |
 | `fl <name>[/query]`   |           | Open the fast link associated with the given name.  |
@@ -102,10 +103,45 @@ fl -sl
 ```bash
 fl --replace google google-search http://www.google.com/search?q={*}
 ```
+Or use the shorthand:
+```bash
+fl -r google google-search http://www.google.com/search?q={*}
+```
 
 #### Replace an Existing Link with a Variable Pattern
 ```bash
 fl --replace google google-search http://www.google.com/ "http://www.google.com/search?q={*}"
+```
+Or use the shorthand:
+```bash
+fl -r google google-search http://www.google.com/ "http://www.google.com/search?q={*}"
+```
+
+#### Edit the Name of an Existing Link
+```bash
+fl --edit google --name g
+```
+Or use the shorthand:
+```bash
+fl -e google -n g
+```
+
+#### Edit the URL of an Existing Link
+```bash
+fl --edit google --link https://new-url.com
+```
+Or use the shorthand:
+```bash
+fl -e google -l https://new-url.com
+```
+
+#### Edit the Variable URL of an Existing Link
+```bash
+fl --edit google --vlink "https://new-url.com/{*}"
+```
+Or use the shorthand:
+```bash
+fl -e google -vl "https://new-url.com/{*}"
 ```
 
 #### Delete a Link

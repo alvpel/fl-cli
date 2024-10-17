@@ -75,6 +75,35 @@ export async function replaceLink(oldName: string, newName: string, newUrl: stri
     console.log(`FL "${oldName}" has been updated to "${newName}" with URL "${newUrl}"`);
 }
 
+export async function editLink(name: string, field: string, value: string, configPath: string = defaultConfigPath) {
+    const links = readLinksConfig(configPath);
+    if (!links[name]) {
+        console.error(`FL "${name}" does not exist.`);
+        return;
+    }
+
+    switch(field) {
+        case '--name':
+        case '-n':
+            links[value] = links[name];
+            delete links[name];
+            console.log(`FL "${name}" has been renamed to "${value}"`);
+            break;
+        case '--link':
+        case '-l':
+            links[name].baseUrl = value;
+            console.log(`FL "${name} URL updated to "${value}"`)
+            break;
+        case '--vlink':
+        case '-vl':
+            links[name].variablePattern = value;
+            console.log(`FL "${name} variable URL updated to "${value}"`)
+            break;
+    }
+
+    await writeLinksConfig(links, configPath);
+}
+
 export async function deleteLink(name: string, configPath: string = defaultConfigPath) {
     const links = readLinksConfig(configPath);
     if (!links[name]) {

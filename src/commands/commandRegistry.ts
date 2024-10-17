@@ -43,14 +43,25 @@ export const commands: Command[] = [
     {
         name: '--replace',
         shorthand: '-r',
-        description: 'Edit an existing fast link with a new name and URL.',
+        description: 'Replace an existing fast link with a new name and URL.',
         args: [
             { name: 'old-name', required: true },
             { name: 'new-name', required: true },
             { name: 'new-url', required: true },
             { name: 'new-variablePattern', required: false }
         ],
-        usage: 'fl [--edit, -e] <old-name> <new-name> \'<new-url>\' \'<new-variablePattern>\'',
+        usage: 'fl [--replace, -r] <old-name> <new-name> \'<new-url>\' \'<new-variablePattern>\'',
+    },
+    {
+        name: '--edit',
+        shorthand: '-e',
+        description: 'Edit a field in an existing fast link.',
+        args: [
+            { name: 'name', required: true },
+            { name: 'field', required: true },
+            { name: 'value', required: true },
+        ],
+        usage: 'fl [--edit, -e] <name> [--name, -n; --link, -l; --vlink, -vl] <value>'
     },
     {
         name: '--delete',
