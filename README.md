@@ -8,12 +8,13 @@ Fast Links CLI is a command-line tool built using Deno that allows you to manage
 - [Usage](#usage)
 - [Commands](#commands)
 - [Examples](#examples)
+- [Variable Patterns](#variable-patterns)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Features
 - **Add, Edit, and Delete Fast Links**: Manage URL shortcuts for fast access.
-- **Support for Variable Parameters**: Create links with placeholders to dynamically insert values.
+- **Support for Variable Parameters**: Create links with placeholders to dynamically insert values using `{*}`.
 - **Shorthand Commands**: Use shorthand flags for quicker CLI usage (e.g., `-a` for `--add`).
 - **Shortlist Command**: Quickly display a list of all fast link names.
 
@@ -25,7 +26,7 @@ Fast Links CLI is a command-line tool built using Deno that allows you to manage
 ### Clone the Repository
 1. Clone the repository to your local machine:
    ```bash
-   git clone https://github.com/alvpel/fl-cli.git
+   git clone https://github.com/your-username/fast-links-cli.git
    ```
 2. Navigate into the project directory:
    ```bash
@@ -36,18 +37,12 @@ Fast Links CLI is a command-line tool built using Deno that allows you to manage
 
 Use Deno's `compile` command to create an executable:
 ```bash
-deno compile --allow-read --allow-write --allow-run --allow-env --output fl src/cli.ts
+deno compile --allow-read --allow-write --allow-run --output fl src/cli.ts
 ```
 
 Move the binary to a directory in your system's PATH, such as `/usr/local/bin`:
 ```bash
 sudo mv fl /usr/local/bin/
-```
-
-### Run with Deno
-Use Deno's `run` command to run direclty:
-```bash
-deno run --allow-read --allow-write --allow-run --allow-env src/cli.ts [flags]<name>[/<variable>]
 ```
 
 You can now use `fl` as a command from anywhere in your terminal.
@@ -62,11 +57,11 @@ The CLI supports various commands to manage fast links.
 |-----------------------|-----------|-----------------------------------------------------|
 | `fl --list`           | `-l`      | List all available fast links.                      |
 | `fl --shortlist`      | `-sl`     | Show only the names of the fast links.              |
-| `fl --add <name> <url>` | `-a`    | Add a new fast link with an optional variable pattern. |
-| `fl --edit <old-name> <new-name> <new-url>` | `-e` | Edit an existing fast link. |
+| `fl --add <name> <url> [<variableUrl>]` | `-a`    | Add a new fast link with an optional variable pattern. |
+| `fl --edit <old-name> <new-name> <new-url> [<variableUrl>]` | `-e` | Edit an existing fast link. |
 | `fl --delete <name>`  | `-d`      | Delete a fast link by name.                         |
 | `fl --help`           | `-h`      | Show help and usage information.                    |
-| `fl <name>`           |           | Open the fast link associated with the given name.  |
+| `fl <name>[/query]`   |           | Open the fast link associated with the given name.  |
 
 ### Examples
 
@@ -81,7 +76,7 @@ fl -a google http://www.google.com
 
 #### Add a Link with a Variable Pattern
 ```bash
-fl --add search "http://www.google.com/search?q=$$"
+fl --add search "http://www.google.com/search?q={*}"
 ```
 This will allow you to use `fl search/deno` to search Google for "deno."
 
@@ -105,7 +100,7 @@ fl -sl
 
 #### Edit an Existing Link
 ```bash
-fl --edit google google-search http://www.google.com/search?q=$$
+fl --edit google google-search http://www.google.com/search?q={*}
 ```
 
 #### Delete a Link
@@ -126,6 +121,30 @@ fl google
 ```bash
 fl search/deno
 ```
+
+## Variable Patterns
+
+Variable patterns allow you to create dynamic URLs by including placeholders. The placeholder for variables is `{*}`, which can be substituted with a value when the link is used.
+
+### Example Usage
+
+1. **Add a Link with a Variable Pattern**:
+   ```bash
+   fl --add search "http://www.google.com/search?q={*}"
+   ```
+   - When you call `fl search/deno`, `{*}` is replaced by "deno", resulting in:
+     ```
+     http://www.google.com/search?q=deno
+     ```
+
+2. **Editing a Link to Use a Variable**:
+   ```bash
+   fl --edit search search "http://www.bing.com/search?q={*}"
+   ```
+   - Now, `fl search/openai` would redirect to:
+     ```
+     http://www.bing.com/search?q=openai
+     ```
 
 ## Contributing
 
