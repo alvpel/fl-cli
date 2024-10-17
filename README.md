@@ -187,6 +187,11 @@ Variable patterns allow you to create dynamic URLs by including placeholders. Th
      http://www.bing.com/search?q=openai
      ```
 
+## Testing
+```bash
+deno test --allow-read --allow-write --allow-env
+```
+
 ## Contributing
 
 Contributions are welcome! Please follow these steps:
