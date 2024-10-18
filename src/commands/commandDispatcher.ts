@@ -1,50 +1,30 @@
 // deno-lint-ignore-file no-case-declarations
-import { commands } from "./commandRegistry.ts";
 import { listLinks, addLink, replaceLink, editLink, deleteLink, resolveLink, shortlistLinks } from '../services/linkService.ts';
 import { help } from "../services/helpService.ts";
 
-function getCommand(command: string): string | undefined {
-    const foundCommand = commands.find(comd => comd.name === command || comd.shorthand === command);
-    return foundCommand?.name;
-}
-
 export async function handleFlCommand(command: string, args: string[]) {
-    const fullCommand = getCommand(command);
 
-    if (!fullCommand) {
-        // Assume it's a fast link if not a command
-        const resolvedUrl = resolveLink(command);
-        if (resolvedUrl) {
-            console.log(`Opening: ${resolvedUrl}`);
-            const process = new Deno.Command('open', { args: [resolvedUrl] }).spawn();
-            await process.status;
-        } else {
-            console.log(`No fast link found for "${command}"`)
-        }
-        return;
-    }
-
-    const commandDef = commands.find(comd => comd.name === fullCommand);
-    if (!commandDef) {
-        help();
-        return;
-    }
-    switch (fullCommand) {
+    switch (command) {
         case '--list':
+        case '-l':
             listLinks();
             break;
         case '--shortlist':
+        case '-sl':
             shortlistLinks();
             break;
         case '--add':
+        case '-a':
             const [name, url, variablePattern] = args;
             await addLink(name, url, variablePattern);
             break;
         case '--replace':
+        case '-r':
             const [oldName, newName, newUrl, newVariablePattern] = args;
             await replaceLink(oldName, newName, newUrl, newVariablePattern);
             break;
         case '--edit':
+        case '-e':
             const [eName, field, value] = args;
             if (!['--name', '-n', '--link', '-l', '--vlink', '-vl'].includes(field)) {
                 console.error('Invalid field, use --name, --link or --vlink');
@@ -53,13 +33,22 @@ export async function handleFlCommand(command: string, args: string[]) {
             await editLink(eName, field, value);
             break;
         case '--delete':
+        case '-d':
             await deleteLink(args[0]);
             break;
         case '--help':
+        case '-h':
             help();
             break;
         default:
-            help();
+            const resolvedUrl = resolveLink(command);
+            if (resolvedUrl) {
+                console.log(`Opening: ${resolvedUrl}`);
+                const process = new Deno.Command('open', { args: [resolvedUrl] }).spawn();
+                await process.status;
+            } else {
+                console.log(`No fast link found for "${command}"`)
+            }
             break;
         
     }
