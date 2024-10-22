@@ -8,12 +8,12 @@ export interface Command {
 
 export const commands: Command[] = [
     {
-        name: '<name>',
+        name: '<fastlink>',
         description: 'Open the link associated with the shortcut (e.g., fl yt). Supports variables (e.g. fl yt/veritasium',
         args: [
-            { name: 'name', required: true },
+            { name: 'fastlink', required: true },
         ],
-        usage: 'fl <name>[/<variable>]'
+        usage: 'fl <fastlink>[/<variable>]'
     },
     {
         name: '--list',
