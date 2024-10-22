@@ -1,8 +1,11 @@
 # Fast Links CLI (`fl`)
 
-Fast Links CLI is a command-line tool built using Deno that allows you to manage and quickly access predefined URLs (fast links) with optional support for variable parameters.
+Fast Links CLI is a command-line tool built using Deno that allows you to manage
+and quickly access predefined URLs (fast links) with optional support for
+variable parameters.
 
 ## Table of Contents
+
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -13,17 +16,22 @@ Fast Links CLI is a command-line tool built using Deno that allows you to manage
 - [License](#license)
 
 ## Features
+
 - **Add, Replace, and Delete Fast Links**: Manage URL shortcuts for fast access.
-- **Support for Variable Parameters**: Create links with placeholders to dynamically insert values using `{*}`.
-- **Shorthand Commands**: Use shorthand flags for quicker CLI usage (e.g., `-a` for `--add`).
+- **Support for Variable Parameters**: Create links with placeholders to
+  dynamically insert values using `{*}`.
+- **Shorthand Commands**: Use shorthand flags for quicker CLI usage (e.g., `-a`
+  for `--add`).
 - **Shortlist Command**: Quickly display a list of all fast link names.
 
 ## Installation
 
 ### Prerequisites
+
 - Ensure you have [Deno](https://deno.land) installed on your system.
 
 ### Clone the Repository
+
 1. Clone the repository to your local machine:
    ```bash
    git clone https://github.com/your-username/fast-links-cli.git
@@ -36,11 +44,13 @@ Fast Links CLI is a command-line tool built using Deno that allows you to manage
 ### Compile the CLI
 
 Use Deno's `compile` command to create an executable:
+
 ```bash
 deno compile --allow-read --allow-write --allow-run --allow-env --output fl src/cli.ts
 ```
 
 Move the binary to a directory in your system's PATH, such as `/usr/local/bin`:
+
 ```bash
 sudo mv fl /usr/local/bin/
 ```
@@ -53,119 +63,152 @@ The CLI supports various commands to manage fast links.
 
 ### Commands
 
-| Command               | Shorthand | Description                                         |
-|-----------------------|-----------|-----------------------------------------------------|
-| `fl --list`           | `-l`      | List all available fast links.                      |
-| `fl --shortlist`      | `-sl`     | Show only the names of the fast links.              |
-| `fl --add <name> <url> [<variableUrl>]` | `-a`    | Add a new fast link with an optional variable pattern. |
-| `fl --replace <old-name> <new-name> <new-url> [<variableUrl>]` | `-r` | Replace an existing fast link. |
-| `fl --edit <name> <field> <value>` | `-e` | Edit a value of an existing fast link. Fields: --name, --link, --vlink. |
-| `fl --delete <name>`  | `-d`      | Delete a fast link by name.                         |
-| `fl --help`           | `-h`      | Show help and usage information.                    |
-| `fl <name>[/query]`   |           | Open the fast link associated with the given name.  |
+| Command                                                        | Shorthand | Description                                                             |
+| -------------------------------------------------------------- | --------- | ----------------------------------------------------------------------- |
+| `fl --list`                                                    | `-l`      | List all available fast links.                                          |
+| `fl --shortlist`                                               | `-sl`     | Show only the names of the fast links.                                  |
+| `fl --add <name> <url> [<variableUrl>]`                        | `-a`      | Add a new fast link with an optional variable pattern.                  |
+| `fl --replace <old-name> <new-name> <new-url> [<variableUrl>]` | `-r`      | Replace an existing fast link.                                          |
+| `fl --edit <name> <field> <value>`                             | `-e`      | Edit a value of an existing fast link. Fields: --name, --link, --vlink. |
+| `fl --delete <name>`                                           | `-d`      | Delete a fast link by name.                                             |
+| `fl --help`                                                    | `-h`      | Show help and usage information.                                        |
+| `fl <name>[/query]`                                            |           | Open the fast link associated with the given name.                      |
 
 ### Examples
 
 #### Add a New Link
+
 ```bash
 fl --add google http://www.google.com
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -a google http://www.google.com
 ```
 
 #### Add a Link with a Variable Pattern
+
 ```bash
 fl --add google http://www.google.com "http://www.google.com/search?q={*}"
 ```
+
 This will allow you to use `fl search/deno` to search Google for "deno."
 
 #### List All Links
+
 ```bash
 fl --list
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -l
 ```
 
 #### Show Only Fast Link Names (Shortlist)
+
 ```bash
 fl --shortlist
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -sl
 ```
 
 #### Replace an Existing Link
+
 ```bash
 fl --replace google google-search http://www.google.com/search?q={*}
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -r google google-search http://www.google.com/search?q={*}
 ```
 
 #### Replace an Existing Link with a Variable Pattern
+
 ```bash
 fl --replace google google-search http://www.google.com/ "http://www.google.com/search?q={*}"
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -r google google-search http://www.google.com/ "http://www.google.com/search?q={*}"
 ```
 
 #### Edit the Name of an Existing Link
+
 ```bash
 fl --edit google --name g
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -e google -n g
 ```
 
 #### Edit the URL of an Existing Link
+
 ```bash
 fl --edit google --link https://new-url.com
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -e google -l https://new-url.com
 ```
 
 #### Edit the Variable URL of an Existing Link
+
 ```bash
 fl --edit google --vlink "https://new-url.com/{*}"
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -e google -vl "https://new-url.com/{*}"
 ```
 
 #### Delete a Link
+
 ```bash
 fl --delete google-search
 ```
+
 Or use the shorthand:
+
 ```bash
 fl -d google-search
 ```
 
 #### Open a Fast Link
+
 ```bash
 fl google
 ```
 
 #### Open a Fast Link with a Variable
+
 ```bash
 fl google/deno
 ```
 
 ## Variable Patterns
 
-Variable patterns allow you to create dynamic URLs by including placeholders. The placeholder for variables is `{*}`, which can be substituted with a value when the link is used.
+Variable patterns allow you to create dynamic URLs by including placeholders.
+The placeholder for variables is `{*}`, which can be substituted with a value
+when the link is used.
 
 ### Example Usage
 
@@ -188,6 +231,7 @@ Variable patterns allow you to create dynamic URLs by including placeholders. Th
      ```
 
 ## Testing
+
 ```bash
 deno test --allow-read --allow-write --allow-env
 ```
