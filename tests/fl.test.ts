@@ -3,9 +3,7 @@ import { spy, assertSpyCalls } from "jsr:@std/testing/mock";
 import { addLink, replaceLink, editLink, deleteLink, resolveLink } from "../src/services/linkService.ts";
 import { writeLinksConfig, readLinksConfig, initConfig } from "../src/config/configService.ts";
 import { join } from "jsr:@std/path";
-import * as linkService from "../src/services/linkService.ts";
 import { handleFlCommand } from "../src/commands/commandDispatcher.ts";
-import { help } from "../src/services/helpService.ts";
 
 // Use a temporary file for testing
 const testConfigPath = join(Deno.cwd(), 'tests', 'links.test.json');
@@ -19,6 +17,21 @@ const mockLinks = {
 // Helper to reset the mock configuration before each test
 async function resetMockConfig() {
   await writeLinksConfig(mockLinks, testConfigPath);
+}
+
+// Default services object with mock functions for all required methods
+function createMockServices(overrides = {}) {
+  return {
+    listLinks: spy(() => {}),
+    shortlistLinks: spy(() => {}),
+    addLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    replaceLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    editLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    deleteLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    resolveLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    help: spy(() => {}),
+    ...overrides, // Override specific methods if needed
+  };
 }
 
 initConfig(testConfigPath);
@@ -150,21 +163,6 @@ Deno.test("List Links: Lists all links including those with variable patterns", 
   assertEquals(links["g"].variablePattern, "https://www.google.com/search?q={*}");
 });
 
-// Default services object with mock functions for all required methods
-function createMockServices(overrides = {}) {
-  return {
-    listLinks: spy(() => {}),
-    shortlistLinks: spy(() => {}),
-    addLink: spy(() => Promise.resolve()), // Returning a resolved promise
-    replaceLink: spy(() => Promise.resolve()), // Returning a resolved promise
-    editLink: spy(() => Promise.resolve()), // Returning a resolved promise
-    deleteLink: spy(() => Promise.resolve()), // Returning a resolved promise
-    resolveLink: spy(() => Promise.resolve()), // Returning a resolved promise
-    help: spy(() => {}),
-    ...overrides, // Override specific methods if needed
-  };
-}
-
 Deno.test("handleFlCommand should call listLinks for --list command", () => {
   const services = createMockServices({ listLinks: spy() });
   handleFlCommand("--list", [], services);
@@ -213,11 +211,17 @@ Deno.test("handleFlCommand should call help for --help command", () => {
   assertSpyCalls(services.help, 1);
 });
 
-Deno.test("handleFlCommand should log error for invalid edit field", async () => {
+Deno.test("editLink should log error for invalid edit field", async () => {
   const consoleErrorSpy = spy(console, "error");
-  const services = createMockServices({ editLink: spy() });
 
-  await handleFlCommand("--edit", ["google", "--invalid", "g"], services);
+  const services = createMockServices({
+    editLink: editLink 
+  });
+
+  await handleFlCommand("--edit", ["g", "--invalid", "new-value"], services);
+
   assertSpyCalls(consoleErrorSpy, 1);
+  assertEquals(consoleErrorSpy.calls[0].args[0], 'Invalid field, use --name, --link or --vlink');
+
   consoleErrorSpy.restore();
 });
