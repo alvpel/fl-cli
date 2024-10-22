@@ -28,22 +28,26 @@ export async function resolveLink(
 
 export function listLinks(configPath: string = defaultConfigPath) {
     const links = readLinksConfig(configPath);
-    console.log('Available links:');
+    console.log(`# Available Links\n`);
+    
     for (const [name, config] of Object.entries(links)) {
         if (typeof config === 'object' && config !== null) {
-            console.log(`${name}: ${config.baseUrl}`);
+            console.log(`### ${name}`);
+            console.log(`- **Base URL**: ${config.baseUrl}`);
         }
         if (config.variablePattern) {
-            console.log(`    - ${config.variablePattern}`);
+            console.log(`- **Variable Pattern**: ${config.variablePattern}`);
         }
+        console.log(''); // Blank line for spacing
     }
 }
 
 export function shortlistLinks(configPath: string = defaultConfigPath) {
     const links = readLinksConfig(configPath);
-    console.log('Link names:');
+    console.log(`# Link Names\n`);
+    
     for (const name of Object.keys(links)) {
-        console.log(`- ${name}`);
+        console.log(`- **${name}**`);
     }
 }
 
