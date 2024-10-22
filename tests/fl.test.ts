@@ -232,18 +232,28 @@ Deno.test("handleFlCommand should call addLink for --add command", async () => {
 
 Deno.test("handleFlCommand should call replaceLink for --replace command", async () => {
   const services = createMockServices({ replaceLink: spy() });
-  await handleFlCommand("--replace", [
-    "google",
-    "g",
-    "https://www.google.com",
-    "",
-  ], services, testConfigPath);
+  await handleFlCommand(
+    "--replace",
+    [
+      "google",
+      "g",
+      "https://www.google.com",
+      "",
+    ],
+    services,
+    testConfigPath,
+  );
   assertSpyCalls(services.replaceLink, 1);
 });
 
 Deno.test("handleFlCommand should call editLink for --edit command with --name", async () => {
   const services = createMockServices({ editLink: spy() });
-  await handleFlCommand("--edit", ["google", "--name", "g"], services, testConfigPath);
+  await handleFlCommand(
+    "--edit",
+    ["google", "--name", "g"],
+    services,
+    testConfigPath,
+  );
   assertSpyCalls(services.editLink, 1);
 });
 
@@ -272,7 +282,12 @@ Deno.test("editLink should log error for invalid edit field", async () => {
     editLink: editLink,
   });
 
-  await handleFlCommand("--edit", ["g", "--invalid", "new-value"], services, testConfigPath);
+  await handleFlCommand(
+    "--edit",
+    ["g", "--invalid", "new-value"],
+    services,
+    testConfigPath,
+  );
 
   assertSpyCalls(consoleErrorSpy, 1);
   assertEquals(

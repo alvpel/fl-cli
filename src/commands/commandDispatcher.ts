@@ -45,7 +45,13 @@ export async function handleFlCommand(
     case "--replace":
     case "-r":
       const [oldName, newName, newUrl, newVariablePattern] = args;
-      await services.replaceLink(oldName, newName, newUrl, newVariablePattern, configPath);
+      await services.replaceLink(
+        oldName,
+        newName,
+        newUrl,
+        newVariablePattern,
+        configPath,
+      );
       break;
     case "--edit":
     case "-e":
