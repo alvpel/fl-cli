@@ -1,7 +1,11 @@
 import { assertEquals, assertExists } from "jsr:@std/assert";
+import { spy, assertSpyCalls } from "jsr:@std/testing/mock";
 import { addLink, replaceLink, editLink, deleteLink, resolveLink } from "../src/services/linkService.ts";
 import { writeLinksConfig, readLinksConfig, initConfig } from "../src/config/configService.ts";
 import { join } from "jsr:@std/path";
+import * as linkService from "../src/services/linkService.ts";
+import { handleFlCommand } from "../src/commands/commandDispatcher.ts";
+import { help } from "../src/services/helpService.ts";
 
 // Use a temporary file for testing
 const testConfigPath = join(Deno.cwd(), 'tests', 'links.test.json');
@@ -88,22 +92,44 @@ Deno.test("Edit Link: Fails when using an invalid field", async () => {
 // Test: Resolve Link with Variable
 Deno.test("Resolve Link: Resolves a link with a variable correctly", async () => {
   await resetMockConfig();
-  const resolvedLink = resolveLink("g/test", testConfigPath);
-  assertEquals(resolvedLink, "https://www.google.com/search?q=test");
+  const openUrlMock = spy(async (url: string) => {
+    await console.log(`Mock opening: ${url}`);
+  });
+  await resolveLink("g/test", testConfigPath, openUrlMock);
+
+  assertSpyCalls(openUrlMock, 1);
+  assertEquals(openUrlMock.calls[0].args[0], "https://www.google.com/search?q=test");
 });
 
 // Test: Resolve Link without Variable
 Deno.test("Resolve Link: Resolves a link without a variable correctly", async () => {
   await resetMockConfig();
-  const resolvedLink = resolveLink("g", testConfigPath);
-  assertEquals(resolvedLink, "https://www.google.com");
+
+  const openUrlMock = spy(async (url: string) => {
+    await console.log(`Mock opening: ${url}`);
+  });
+
+  await resolveLink("g", testConfigPath, openUrlMock);
+
+  assertSpyCalls(openUrlMock, 1);
+  assertEquals(openUrlMock.calls[0].args[0], "https://www.google.com");
 });
 
 // Test: Resolve Non-Existent Link
 Deno.test("Resolve Link: Returns null for a non-existent link", async () => {
   await resetMockConfig();
-  const resolvedLink = resolveLink("nonexistent", testConfigPath);
-  assertEquals(resolvedLink, null);
+
+  const openUrlMock = spy(async (url: string) => {
+    await console.log(`Mock opening: ${url}`);
+  });
+  const consoleLog = spy(console, "log");
+  await resolveLink("unknown", testConfigPath, openUrlMock);
+  
+  assertSpyCalls(openUrlMock, 0);
+  assertSpyCalls(consoleLog, 1);
+  assertEquals(consoleLog.calls[0].args[0], "No fast link found for \"unknown\"");
+
+  consoleLog.restore();
 });
 
 // Test: Delete Link with Variable Pattern
@@ -122,4 +148,76 @@ Deno.test("List Links: Lists all links including those with variable patterns", 
   assertEquals(links["dashboard"].baseUrl, "https://dashboard.com");
   assertEquals(links["g"].baseUrl, "https://www.google.com");
   assertEquals(links["g"].variablePattern, "https://www.google.com/search?q={*}");
+});
+
+// Default services object with mock functions for all required methods
+function createMockServices(overrides = {}) {
+  return {
+    listLinks: spy(() => {}),
+    shortlistLinks: spy(() => {}),
+    addLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    replaceLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    editLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    deleteLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    resolveLink: spy(() => Promise.resolve()), // Returning a resolved promise
+    help: spy(() => {}),
+    ...overrides, // Override specific methods if needed
+  };
+}
+
+Deno.test("handleFlCommand should call listLinks for --list command", () => {
+  const services = createMockServices({ listLinks: spy() });
+  handleFlCommand("--list", [], services);
+  assertSpyCalls(services.listLinks, 1);
+});
+
+Deno.test("handleFlCommand should call shortlistLinks for --shortlist command", () => {
+  const services = createMockServices({ shortlistLinks: spy() });
+  handleFlCommand("--shortlist", [], services);
+  assertSpyCalls(services.shortlistLinks, 1);
+});
+
+Deno.test("handleFlCommand should call addLink for --add command", async () => {
+  const services = createMockServices({ addLink: spy() });
+  await handleFlCommand("--add", ["google", "https://www.google.com"], services);
+  assertSpyCalls(services.addLink, 1);
+});
+
+Deno.test("handleFlCommand should call replaceLink for --replace command", async () => {
+  const services = createMockServices({ replaceLink: spy() });
+  await handleFlCommand("--replace", ["google", "g", "https://www.google.com", ""], services);
+  assertSpyCalls(services.replaceLink, 1);
+});
+
+Deno.test("handleFlCommand should call editLink for --edit command with --name", async () => {
+  const services = createMockServices({ editLink: spy() });
+  await handleFlCommand("--edit", ["google", "--name", "g"], services);
+  assertSpyCalls(services.editLink, 1);
+});
+
+Deno.test("handleFlCommand should call deleteLink for --delete command", async () => {
+  const services = createMockServices({ deleteLink: spy() });
+  await handleFlCommand("--delete", ["google"], services);
+  assertSpyCalls(services.deleteLink, 1);
+});
+
+Deno.test("handleFlCommand should call resolveLink for default case", async () => {
+  const services = createMockServices({ resolveLink: spy() });
+  await handleFlCommand("google", ["google"], services);
+  assertSpyCalls(services.resolveLink, 1);
+});
+
+Deno.test("handleFlCommand should call help for --help command", () => {
+  const services = createMockServices({ help: spy() });
+  handleFlCommand("--help", [], services);
+  assertSpyCalls(services.help, 1);
+});
+
+Deno.test("handleFlCommand should log error for invalid edit field", async () => {
+  const consoleErrorSpy = spy(console, "error");
+  const services = createMockServices({ editLink: spy() });
+
+  await handleFlCommand("--edit", ["google", "--invalid", "g"], services);
+  assertSpyCalls(consoleErrorSpy, 1);
+  consoleErrorSpy.restore();
 });

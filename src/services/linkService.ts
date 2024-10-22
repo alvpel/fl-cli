@@ -1,22 +1,29 @@
 import { readLinksConfig, writeLinksConfig, LinkConfig } from "../config/configService.ts";
 import { joinPaths } from '../utils/pathUtils.ts';
+import { openUrl } from "../utils/urlUtils.ts";
 
 const defaultConfigPath = joinPaths('.fl', 'links.json');
 
-export function resolveLink(linkName: string, configPath: string = defaultConfigPath): string | null {
+export async function resolveLink(
+    linkName: string,
+    configPath: string = defaultConfigPath,
+    openFn: (url: string) => Promise<void> = openUrl
+) {
     const links = readLinksConfig(configPath);
     const [shortcut, variable] = linkName.split("/", 2);
 
     if (links[shortcut]) {
         const linkConfig = links[shortcut];
+        let url: string = linkConfig.baseUrl;
 
         if (variable && linkConfig.variablePattern) {
-            return linkConfig.variablePattern.replace('{*}', encodeURIComponent(variable));
+            url = linkConfig.variablePattern.replace('{*}', encodeURIComponent(variable));
         }
 
-        return linkConfig.baseUrl;
+        await openFn(url);
+    } else {
+        console.log(`No fast link found for "${linkName}"`)
     }
-    return null;
 }
 
 export function listLinks(configPath: string = defaultConfigPath) {
@@ -77,8 +84,14 @@ export async function replaceLink(oldName: string, newName: string, newUrl: stri
 
 export async function editLink(name: string, field: string, value: string, configPath: string = defaultConfigPath) {
     const links = readLinksConfig(configPath);
+
     if (!links[name]) {
         console.error(`FL "${name}" does not exist.`);
+        return;
+    }
+
+    if (!['--name', '-n', '--link', '-l', '--vlink', '-vl'].includes(field)) {
+        console.error('Invalid field, use --name, --link or --vlink');
         return;
     }
 
