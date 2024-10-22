@@ -1,7 +1,7 @@
 import { commands } from "../commands/commandRegistry.ts";
 
 export function help() {
-    console.log('Usage: fl <fastlink>[/query]')
+    console.log('\nUsage: fl <fastlink>[/query]')
     console.log('Available commands:');
     commands.forEach((cmd) => {
         const flag = cmd.shorthand ? `${cmd.name} (${cmd.shorthand})` : cmd.name;
