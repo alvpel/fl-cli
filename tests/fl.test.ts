@@ -265,6 +265,7 @@ Deno.test("handleFlCommand should call help for --help command", () => {
 });
 
 Deno.test("editLink should log error for invalid edit field", async () => {
+  await resetMockConfig();
   const consoleErrorSpy = spy(console, "error");
 
   const services = createMockServices({
