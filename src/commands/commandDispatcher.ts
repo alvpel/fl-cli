@@ -9,9 +9,7 @@ import {
   shortlistLinks,
 } from "../services/linkService.ts";
 import { help } from "../services/helpService.ts";
-import { joinPaths } from "../utils/pathUtils.ts";
 
-const defaultConfigPath = joinPaths(".fl", "links.json");
 
 export async function handleFlCommand(
   command: string,
@@ -25,22 +23,21 @@ export async function handleFlCommand(
     deleteLink,
     resolveLink,
     help,
-  },
-  configPath: string = defaultConfigPath,
+  }
 ) {
   switch (command) {
     case "--list":
     case "-l":
-      services.listLinks(configPath);
+      services.listLinks();
       break;
     case "--shortlist":
     case "-sl":
-      services.shortlistLinks(configPath);
+      services.shortlistLinks();
       break;
     case "--add":
     case "-a":
       const [name, url, variablePattern] = args;
-      await services.addLink(name, url, variablePattern, configPath);
+      await services.addLink(name, url, variablePattern);
       break;
     case "--replace":
     case "-r":
@@ -50,24 +47,23 @@ export async function handleFlCommand(
         newName,
         newUrl,
         newVariablePattern,
-        configPath,
       );
       break;
     case "--edit":
     case "-e":
       const [eName, field, value] = args;
-      await services.editLink(eName, field, value, configPath);
+      await services.editLink(eName, field, value);
       break;
     case "--delete":
     case "-d":
-      await services.deleteLink(args[0], configPath);
+      await services.deleteLink(args[0]);
       break;
     case "--help":
     case "-h":
       services.help();
       break;
     default:
-      await services.resolveLink(command, configPath);
+      await services.resolveLink(command);
       break;
   }
 }
