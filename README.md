@@ -38,7 +38,7 @@ variable parameters.
    ```
 2. Navigate into the project directory:
    ```bash
-   cd fast-links-cli
+   cd fl-cli
    ```
 
 ### Compile the CLI
