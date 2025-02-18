@@ -34,7 +34,7 @@ variable parameters.
 
 1. Clone the repository to your local machine:
    ```bash
-   git clone https://github.com/your-username/fast-links-cli.git
+   git clone https://github.com/alvpel/fl-cli.git
    ```
 2. Navigate into the project directory:
    ```bash
